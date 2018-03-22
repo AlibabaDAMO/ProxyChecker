@@ -10,7 +10,7 @@ import (
 	"time"
 )
 
-//QR contain info abot proxy
+//QR contain info about proxy
 type QR struct {
 	Addr string
 	Res  bool
@@ -99,6 +99,4 @@ func main() {
 			writeToFile(r.Addr)
 		}
 	}
-
-	time.Sleep(1 * time.Minute)
 }
