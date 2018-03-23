@@ -16,6 +16,7 @@ type QR struct {
 	Res  bool
 }
 
+//Check proxies on uniqueness
 func unique(intSlice []string) []string {
 	keys := make(map[string]bool)
 	list := []string{}
@@ -28,19 +29,23 @@ func unique(intSlice []string) []string {
 	return list
 }
 
+//Writing valid proxies to file
 func writeToFile(proxyURL string) {
 
+	//Opening file live-proxies.txt
 	file, _ := os.OpenFile(`live-proxies.txt`, os.O_APPEND, 0666)
 
 	defer file.Close()
 
 	fileWriter := bufio.NewWriter(file)
 
+	//Writing to file
 	fmt.Fprintln(fileWriter, proxyURL)
 
 	fileWriter.Flush()
 }
 
+//Check proxies on valid
 func checkProxy(proxy string, c chan QR) {
 
 	proxyURL, _ := url.Parse(proxy)
@@ -57,6 +62,7 @@ func checkProxy(proxy string, c chan QR) {
 	}
 }
 
+//Reading proxies from file
 func readFromFile(path string) []string {
 
 	var proxies []string
@@ -74,6 +80,7 @@ func readFromFile(path string) []string {
 
 	for fileScaner.Scan() {
 
+		//Appending proxies to slice
 		proxies = append(proxies, "http://"+fileScaner.Text())
 	}
 
@@ -92,6 +99,7 @@ func main() {
 	var path string
 	fmt.Scan(&path)
 
+	//Creating file live-proxies.txt
 	os.Create(`live-proxies.txt`)
 
 	prox := readFromFile(path)
