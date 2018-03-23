@@ -20,3 +20,6 @@ deploy:
   skip_cleanup: true
   on:
     tags: false
+  branches:
+  only:
+  - master
