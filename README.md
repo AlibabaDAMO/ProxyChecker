@@ -2,6 +2,11 @@
 # ProxyChecker
 http proxy checker
 
+# Releases
+You can download executable file for Windows and Linux on release page
+
+https://github.com/trigun117/ProxyChecker/releases
+
 # Getting Started
 
 Checker accept txt file with proxies which look like this
