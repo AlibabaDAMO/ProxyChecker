@@ -1,0 +1,22 @@
+language: go
+
+go:
+  - "1.10"
+
+script:
+  - GOOS=windows GOARCH=amd64 go build -o ProxyChecker-64bit.exe
+  - GOOS=windows GOARCH=386 go build -o ProxyChecker-32bit.exe
+  - GOOS=linux GOARCH=amd64 go build -o ProxyChecker-64bit
+  - GOOS=linux GOARCH=386 go build -o ProxyChecker-32bit
+
+deploy:
+  provider: releases
+  api_key: $TOKEN
+  file:
+  - "ProxyChecker-64bit.exe"
+  - "ProxyChecker-32bit.exe"
+  - "ProxyChecker-64bit"
+  - "ProxyChecker-32bit"
+  skip_cleanup: true
+  on:
+    tags: false
