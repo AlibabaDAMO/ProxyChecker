@@ -30,7 +30,7 @@ func unique(intSlice []string) []string {
 
 func writeToFile(proxyURL string) {
 
-	file, _ := os.OpenFile(`live-proxy.txt`, os.O_APPEND, 0666)
+	file, _ := os.OpenFile(`live-proxies.txt`, os.O_APPEND, 0666)
 
 	defer file.Close()
 
