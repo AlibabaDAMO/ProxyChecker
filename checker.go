@@ -16,9 +16,19 @@ type QR struct {
 	Res  bool
 }
 
-func writeToFile(proxyURL string) {
+func unique(intSlice []string) []string {
+	keys := make(map[string]bool)
+	list := []string{}
+	for _, entry := range intSlice {
+		if _, value := keys[entry]; !value {
+			keys[entry] = true
+			list = append(list, entry)
+		}
+	}
+	return list
+}
 
-	fmt.Println("Live proxy is: ", proxyURL)
+func writeToFile(proxyURL string) {
 
 	file, _ := os.OpenFile(`live-proxy.txt`, os.O_APPEND, 0666)
 
@@ -33,8 +43,6 @@ func writeToFile(proxyURL string) {
 
 func checkProxy(proxy string, c chan QR) {
 
-	fmt.Println("Get proxy", proxy)
-
 	proxyURL, _ := url.Parse(proxy)
 	timeout := time.Duration(5 * time.Second)
 	httpClient := &http.Client{Timeout: timeout, Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
@@ -42,7 +50,6 @@ func checkProxy(proxy string, c chan QR) {
 
 	if err != nil {
 
-		fmt.Println("Dead proxy", proxy)
 		c <- QR{Addr: proxy, Res: false}
 	} else {
 
@@ -52,7 +59,7 @@ func checkProxy(proxy string, c chan QR) {
 
 func readFromFile(path string) []string {
 
-	var proxys []string
+	var proxies []string
 
 	file, err := os.Open(path)
 
@@ -67,12 +74,12 @@ func readFromFile(path string) []string {
 
 	for fileScaner.Scan() {
 
-		proxys = append(proxys, "http://"+fileScaner.Text())
+		proxies = append(proxies, "http://"+fileScaner.Text())
 	}
 
-	fmt.Println("Got ", len(proxys), " proxys")
+	fmt.Println("Got", len(proxies), "proxies from file")
 
-	return proxys
+	return proxies
 }
 
 func main() {
@@ -84,15 +91,25 @@ func main() {
 	fmt.Printf("Enter path to file: ")
 	var path string
 	fmt.Scan(&path)
-	os.Create(`live-proxy.txt`)
+
+	os.Create(`live-proxies.txt`)
+
 	prox := readFromFile(path)
 
-	for _, proxy := range prox {
+	uniqueProxies := unique(prox)
+
+	fmt.Println("Got", len(uniqueProxies), "unique proxies")
+
+	time.Sleep(5 * time.Second)
+
+	fmt.Println("START")
+
+	for _, proxy := range uniqueProxies {
 
 		go checkProxy(proxy, respChan)
 	}
 
-	for range prox {
+	for range uniqueProxies {
 		r := <-respChan
 
 		if r.Res {
