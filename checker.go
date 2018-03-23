@@ -100,7 +100,7 @@ func main() {
 
 	fmt.Println("Got", len(uniqueProxies), "unique proxies")
 
-	time.Sleep(5 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	fmt.Println("START")
 
