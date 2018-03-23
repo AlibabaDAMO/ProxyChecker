@@ -1,5 +1,11 @@
+[![Build Status](https://travis-ci.org/trigun117/ProxyChecker.svg?branch=master)](https://travis-ci.org/trigun117/ProxyChecker)
 # ProxyChecker
 http proxy checker
+
+# Releases
+You can download executable file for Windows and Linux on release page
+
+https://github.com/trigun117/ProxyChecker/releases
 
 # Getting Started
 
