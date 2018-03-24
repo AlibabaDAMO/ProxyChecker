@@ -134,9 +134,6 @@ func main() {
 	var path string
 	fmt.Scan(&path)
 
-	//Creating file live-proxies.txt
-	os.Create(`live-proxies.txt`)
-
 	prox := readFromFile(path)
 
 	uniqueProxies := unique(prox)
@@ -153,6 +150,8 @@ func main() {
 
 		go checkProxy(proxy, respChan, realIP)
 	}
+
+	os.Create(`live-proxies.txt`)
 
 	for range uniqueProxies {
 		r := <-respChan
