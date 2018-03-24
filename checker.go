@@ -3,9 +3,11 @@ package main
 import (
 	"bufio"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
+	"regexp"
 	"runtime"
 	"time"
 )
@@ -14,6 +16,31 @@ import (
 type QR struct {
 	Addr string
 	Res  bool
+}
+
+//Removes everything around ip
+func cleanIP(dirtyIP string) (cleanIP string) {
+
+	r1, _ := regexp.Compile(`^.......|..$`)
+	cleanIP = r1.ReplaceAllString(dirtyIP, "")
+
+	return
+}
+
+//Getting real ip of device
+func getRealIP() (realIP string) {
+
+	res, err := http.Get("https://api.ipify.org?format=json")
+	if err != nil {
+
+		panic(err)
+	}
+
+	body1, _ := ioutil.ReadAll(res.Body)
+
+	realIP = cleanIP(string(body1))
+
+	return
 }
 
 //Check proxies on uniqueness
@@ -46,19 +73,27 @@ func writeToFile(proxyURL string) {
 }
 
 //Check proxies on valid
-func checkProxy(proxy string, c chan QR) {
+func checkProxy(proxy string, c chan QR, realIP string) {
 
+	//Sending request through proxy
 	proxyURL, _ := url.Parse(proxy)
 	timeout := time.Duration(5 * time.Second)
 	httpClient := &http.Client{Timeout: timeout, Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
-	_, err := httpClient.Get("https://www.google.com/")
+	response, err := httpClient.Get("https://api.ipify.org?format=json")
 
 	if err != nil {
 
 		c <- QR{Addr: proxy, Res: false}
 	} else {
 
-		c <- QR{Addr: proxy, Res: true}
+		body, _ := ioutil.ReadAll(response.Body)
+		resp := cleanIP(string(body))
+
+		//Proxy is checked for anonymity
+		if resp != realIP {
+
+			c <- QR{Addr: proxy, Res: true}
+		}
 	}
 }
 
@@ -112,9 +147,11 @@ func main() {
 
 	fmt.Println("START")
 
+	realIP := getRealIP()
+
 	for _, proxy := range uniqueProxies {
 
-		go checkProxy(proxy, respChan)
+		go checkProxy(proxy, respChan, realIP)
 	}
 
 	for range uniqueProxies {
