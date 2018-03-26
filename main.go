@@ -17,6 +17,8 @@ func main() {
 	var path string
 	fmt.Scan(&path)
 
+	fmt.Println("Reading file")
+
 	prox := readFromFile(path)
 
 	uniqueProxies := unique(prox)
@@ -25,7 +27,7 @@ func main() {
 
 	time.Sleep(2 * time.Second)
 
-	fmt.Println("START")
+	fmt.Println("Starting checking proxies")
 
 	realIP := getRealIP()
 
@@ -36,6 +38,8 @@ func main() {
 
 	os.Create(`live-proxies.txt`)
 
+	fmt.Println("Writing valid proxies to file")
+
 	for range uniqueProxies {
 		r := <-respChan
 
@@ -43,4 +47,6 @@ func main() {
 			writeToFile(r.Addr)
 		}
 	}
+
+	time.Sleep(2 * time.Second)
 }

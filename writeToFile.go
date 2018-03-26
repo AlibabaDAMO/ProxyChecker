@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"regexp"
 )
 
 //Writing valid proxies to file
@@ -16,8 +17,13 @@ func writeToFile(proxyURL string) {
 
 	fileWriter := bufio.NewWriter(file)
 
+	//Remove http from proxy url
+	r, _ := regexp.Compile(`^http://`)
+
+	cleanProxy := r.ReplaceAllString(proxyURL, "")
+
 	//Writing to file
-	fmt.Fprintln(fileWriter, proxyURL)
+	fmt.Fprintln(fileWriter, cleanProxy)
 
 	fileWriter.Flush()
 }
