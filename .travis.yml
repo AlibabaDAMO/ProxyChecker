@@ -8,9 +8,8 @@ before_install:
 
 script:
   - GOOS=windows CGO_ENABLED=1 CC=x86_64-w64-mingw32-gcc CXX=x86_64-w64-mingw32-g++ go build -ldflags -H=windowsgui -o Windows-ProxyChecker.exe
-  #- GOOS=linux CGO_ENABLED=0 go build -o Linux-ProxyChecker
+  #- GOOS=linux CGO_ENABLED=1 go build -o Linux-ProxyChecker
   - go build -o macOS-ProxyChecker
-  - ls
 
 deploy:
   provider: releases
