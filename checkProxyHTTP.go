@@ -8,11 +8,11 @@ import (
 )
 
 //Check proxies on valid
-func checkProxy(proxy string, c chan QR, realIP string) {
+func checkProxyHTTP(proxy string, c chan QR, realIP string) {
 
 	//Sending request through proxy
 	proxyURL, _ := url.Parse(proxy)
-	timeout := time.Duration(5 * time.Second)
+	timeout := time.Duration(10 * time.Second)
 	httpClient := &http.Client{Timeout: timeout, Transport: &http.Transport{Proxy: http.ProxyURL(proxyURL)}}
 	response, err := httpClient.Get("https://api.ipify.org?format=json")
 

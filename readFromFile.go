@@ -6,7 +6,7 @@ import (
 )
 
 //Reading proxies from file
-func readFromFile(path string) []string {
+func readFromFile(path string, proxyType int) []string {
 
 	var proxies []string
 
@@ -24,10 +24,13 @@ func readFromFile(path string) []string {
 	for fileScaner.Scan() {
 
 		//Appending proxies to slice
-		proxies = append(proxies, "http://"+fileScaner.Text())
+		switch proxyType {
+		case 0:
+			proxies = append(proxies, "http://"+fileScaner.Text())
+		case 1:
+			proxies = append(proxies, fileScaner.Text())
+		}
 	}
-
-	println("Got", len(proxies), "proxies from file")
 
 	return proxies
 }

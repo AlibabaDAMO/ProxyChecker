@@ -27,6 +27,11 @@ func main() {
 		button1 := ui.NewButton("Start Checking")
 		button3 := ui.NewButton("Exit")
 
+		bt := ui.NewCombobox()
+
+		bt.Append("HTTP")
+		bt.Append("SOCKS")
+
 		//Creating labels
 		greeting := ui.NewLabel("")
 		res := ui.NewLabel("")
@@ -38,6 +43,9 @@ func main() {
 		box := ui.NewVerticalBox()
 
 		//Appending elements to box
+		box.Append(ui.NewLabel("Select proxy type"), false)
+		box.Append(bt, false)
+		box.Append(ui.NewLabel("\n"), false)
 		box.Append(ui.NewLabel("Path to file with proxies"), false)
 		box.Append(input, false)
 		box.Append(ui.NewLabel("\n"), false)
@@ -52,10 +60,12 @@ func main() {
 		box.Append(button3, false)
 
 		//Creating window
-		window := ui.NewWindow("ProxyChecker", 150, 150, false)
+		window := ui.NewWindow("ProxyChecker", 300, 300, false)
 		window.SetMargined(true)
 		window.SetChild(box)
 
+		button1.Disable()
+		bt.SetSelected(1)
 		button3.Hide()
 
 		//Button click event
@@ -64,23 +74,38 @@ func main() {
 			//Open file
 			input.SetText(ui.OpenFile(window))
 
-			prox = readFromFile(input.Text())
-			uniqueProxies = unique(prox)
+			switch bt.Selected() {
+			case 0:
+				prox = readFromFile(input.Text(), 0)
+				uniqueProxies = unique(prox)
+			case 1:
+				prox = readFromFile(input.Text(), 1)
+				uniqueProxies = unique(prox)
+			}
+
+			button1.Enable()
 		})
 
 		//Button click event
 		button1.OnClicked(func(*ui.Button) {
 
 			//Updating progress bar value
-			pb.SetValue(30)
+			pb.SetValue(20)
 
-			realIP := getRealIP()
-			for _, proxy := range uniqueProxies {
-				go checkProxy(proxy, respChan, realIP)
+			switch bt.Selected() {
+			case 0:
+				realIP := getRealIP()
+				for _, proxy := range uniqueProxies {
+					go checkProxyHTTP(proxy, respChan, realIP)
+				}
+			case 1:
+				for _, proxy := range uniqueProxies {
+					go checkProxySOCKS(proxy, respChan)
+				}
 			}
 
 			//Updating progress bar value
-			pb.SetValue(80)
+			pb.SetValue(50)
 
 			os.Create(`live-proxies.txt`)
 			for range uniqueProxies {
