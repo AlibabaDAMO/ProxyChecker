@@ -30,7 +30,6 @@ Set the path to txt file with proxies
 ```
 Enter path to file: C:\Documents\proxy.txt
 ```
-And push Enter
 
 After checker complete, he create file `live-proxies.txt` and put valid proxies to it.
 
