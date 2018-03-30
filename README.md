@@ -3,7 +3,7 @@
 http/socks proxy checker
 
 # Releases
-You can download executable file for Windows and Linux on release page
+You can download executable file for Windows, Linux, macOS on release page
 
 https://github.com/trigun117/ProxyChecker/releases
 
