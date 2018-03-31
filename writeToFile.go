@@ -1,8 +1,6 @@
 package main
 
 import (
-	"bufio"
-	"fmt"
 	"os"
 	"regexp"
 )
@@ -11,19 +9,13 @@ import (
 func writeToFile(proxyURL string) {
 
 	//Opening file live-proxies.txt
-	file, _ := os.OpenFile(`live-proxies.txt`, os.O_APPEND, 0666)
+	file, _ := os.OpenFile("live-proxies.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	defer file.Close()
 
-	fileWriter := bufio.NewWriter(file)
-
-	//Remove http from proxy url
-	r, _ := regexp.Compile(`^http://`)
+	r := regexp.MustCompile(`^http://`)
 
 	cleanProxy := r.ReplaceAllString(proxyURL, "")
 
-	//Writing to file
-	fmt.Fprintln(fileWriter, cleanProxy)
-
-	fileWriter.Flush()
+	file.WriteString(cleanProxy + "\r\n")
 }

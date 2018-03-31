@@ -2,7 +2,6 @@ package main
 
 import (
 	"github.com/andlabs/ui"
-	"os"
 	"runtime"
 )
 
@@ -60,7 +59,7 @@ func main() {
 		box.Append(button3, false)
 
 		//Creating window
-		window := ui.NewWindow("ProxyChecker", 300, 300, false)
+		window := ui.NewWindow("ProxyChecker by trigun117", 500, 200, false)
 		window.SetMargined(true)
 		window.SetChild(box)
 
@@ -107,7 +106,6 @@ func main() {
 			//Updating progress bar value
 			pb.SetValue(50)
 
-			os.Create(`live-proxies.txt`)
 			for range uniqueProxies {
 				r := <-respChan
 				if r.Res {

@@ -10,12 +10,7 @@ func readFromFile(path string, proxyType int) []string {
 
 	var proxies []string
 
-	file, err := os.Open(path)
-
-	if err != nil {
-
-		println("Can't open file")
-	}
+	file, _ := os.Open(path)
 
 	defer file.Close()
 
