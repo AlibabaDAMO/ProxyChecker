@@ -16,8 +16,6 @@ matrix:
 
     - os: linux
       before_install:
-        - chmod +x test.sh
-        - ./test.sh
         - sudo apt-get update
         - sudo apt-get install libgtk-3-dev -y
       script:
