@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/trigun117/ProxyChecker.svg?branch=master)](https://travis-ci.org/trigun117/ProxyChecker) [![codecov](https://codecov.io/gh/trigun117/ProxyChecker/branch/master/graph/badge.svg)](https://codecov.io/gh/trigun117/ProxyChecker)[![Go Report Card](https://goreportcard.com/badge/github.com/trigun117/ProxyChecker)](https://goreportcard.com/report/github.com/trigun117/ProxyChecker)
+[![Build Status](https://travis-ci.org/trigun117/ProxyChecker.svg?branch=master)](https://travis-ci.org/trigun117/ProxyChecker) [![codecov](https://codecov.io/gh/trigun117/ProxyChecker/branch/master/graph/badge.svg)](https://codecov.io/gh/trigun117/ProxyChecker) [![Go Report Card](https://goreportcard.com/badge/github.com/trigun117/ProxyChecker)](https://goreportcard.com/report/github.com/trigun117/ProxyChecker)
 # ProxyChecker
 http/socks proxy checker
 
