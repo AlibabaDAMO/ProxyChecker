@@ -1,4 +1,4 @@
-package main
+package code
 
 import (
 	"io/ioutil"
@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-//Check proxies on valid
-func checkProxyHTTP(proxy string, c chan QR, realIP string) {
+//CheckProxyHTTP Check proxies on valid
+func CheckProxyHTTP(proxy string, c chan QR, realIP string) {
 
 	//Sending request through proxy
 	proxyURL, _ := url.Parse(proxy)

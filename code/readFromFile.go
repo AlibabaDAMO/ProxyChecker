@@ -1,16 +1,19 @@
-package main
+package code
 
 import (
 	"bufio"
 	"os"
 )
 
-//Reading proxies from file
-func readFromFile(path string, proxyType int) []string {
+//ReadFromFile Reading proxies from file
+func ReadFromFile(path string, proxyType int) ([]string, error) {
 
 	var proxies []string
 
-	file, _ := os.Open(path)
+	file, err := os.Open(path)
+	if err != nil {
+		return proxies, err
+	}
 
 	defer file.Close()
 
@@ -27,5 +30,5 @@ func readFromFile(path string, proxyType int) []string {
 		}
 	}
 
-	return proxies
+	return proxies, err
 }

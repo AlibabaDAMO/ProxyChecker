@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/andlabs/ui"
+	"github.com/trigun117/ProxyChecker/code"
 	"runtime"
 )
 
@@ -9,7 +10,7 @@ func main() {
 
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	respChan := make(chan QR)
+	respChan := make(chan code.QR)
 
 	err := ui.Main(func() {
 
@@ -70,16 +71,18 @@ func main() {
 		//Button click event
 		button.OnClicked(func(*ui.Button) {
 
+			bt.Disable()
+
 			//Open file
 			input.SetText(ui.OpenFile(window))
 
 			switch bt.Selected() {
 			case 0:
-				prox = readFromFile(input.Text(), 0)
-				uniqueProxies = unique(prox)
+				prox, _ = code.ReadFromFile(input.Text(), 0)
+				uniqueProxies = code.Unique(prox)
 			case 1:
-				prox = readFromFile(input.Text(), 1)
-				uniqueProxies = unique(prox)
+				prox, _ = code.ReadFromFile(input.Text(), 1)
+				uniqueProxies = code.Unique(prox)
 			}
 
 			button1.Enable()
@@ -88,18 +91,21 @@ func main() {
 		//Button click event
 		button1.OnClicked(func(*ui.Button) {
 
+			button.Disable()
+			button1.Disable()
+
 			//Updating progress bar value
 			pb.SetValue(20)
 
 			switch bt.Selected() {
 			case 0:
-				realIP := getRealIP()
+				realIP, _ := code.GetRealIP(`https://api.ipify.org?format=json`)
 				for _, proxy := range uniqueProxies {
-					go checkProxyHTTP(proxy, respChan, realIP)
+					go code.CheckProxyHTTP(proxy, respChan, realIP)
 				}
 			case 1:
 				for _, proxy := range uniqueProxies {
-					go checkProxySOCKS(proxy, respChan)
+					go code.CheckProxySOCKS(proxy, respChan)
 				}
 			}
 
@@ -109,7 +115,7 @@ func main() {
 			for range uniqueProxies {
 				r := <-respChan
 				if r.Res {
-					writeToFile(r.Addr)
+					code.WriteToFile(r.Addr)
 				}
 			}
 

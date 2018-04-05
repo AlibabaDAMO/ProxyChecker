@@ -1,7 +1,7 @@
-package main
+package code
 
-//Check proxies on uniqueness
-func unique(intSlice []string) []string {
+//Unique Check proxies on uniqueness
+func Unique(intSlice []string) []string {
 	keys := make(map[string]bool)
 	list := []string{}
 	for _, entry := range intSlice {

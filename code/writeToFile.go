@@ -1,12 +1,12 @@
-package main
+package code
 
 import (
 	"os"
 	"regexp"
 )
 
-//Writing valid proxies to file
-func writeToFile(proxyURL string) {
+//WriteToFile Writing valid proxies to file
+func WriteToFile(proxyURL string) error {
 
 	//Opening file live-proxies.txt
 	file, _ := os.OpenFile("live-proxies.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -17,5 +17,7 @@ func writeToFile(proxyURL string) {
 
 	cleanProxy := r.ReplaceAllString(proxyURL, "")
 
-	file.WriteString(cleanProxy + "\r\n")
+	_, err := file.WriteString(cleanProxy + "\r\n")
+
+	return err
 }
