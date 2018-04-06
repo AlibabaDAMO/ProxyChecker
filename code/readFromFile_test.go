@@ -11,9 +11,7 @@ func TestReadFromFile(t *testing.T) {
 		t.Fail()
 	}
 
-	os.Create(`TestReadFromFile.txt`)
-
-	f, _ := os.OpenFile(`TestReadFromFile.txt`, os.O_APPEND, 0644)
+	f, _ := os.OpenFile(`TestReadFromFile.txt`, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
 	f.WriteString(`000.00.000.000:0000`)
 
