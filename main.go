@@ -4,7 +4,10 @@ import (
 	"github.com/andlabs/ui"
 	"github.com/trigun117/ProxyChecker/code"
 	"runtime"
+	"sync"
 )
+
+var wg sync.WaitGroup
 
 func main() {
 
@@ -101,11 +104,13 @@ func main() {
 			case 0:
 				realIP, _ := code.GetRealIP(`https://api.ipify.org?format=json`)
 				for _, proxy := range uniqueProxies {
-					go code.CheckProxyHTTP(proxy, respChan, realIP)
+					wg.Add(1)
+					go checkProxyHTTP(proxy, respChan, realIP, &wg)
 				}
 			case 1:
 				for _, proxy := range uniqueProxies {
-					go code.CheckProxySOCKS(proxy, respChan)
+					wg.Add(1)
+					go code.CheckProxySOCKS(proxy, respChan, &wg)
 				}
 			}
 
@@ -118,6 +123,8 @@ func main() {
 					code.WriteToFile(r.Addr)
 				}
 			}
+
+			wg.Wait()
 
 			//Updating progress bar value
 			pb.SetValue(100)

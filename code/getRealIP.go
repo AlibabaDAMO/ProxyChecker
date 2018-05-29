@@ -16,7 +16,7 @@ func GetRealIP(link string) (string, error) {
 
 	body1, _ := ioutil.ReadAll(res.Body)
 
-	realIP := cleanIP(string(body1))
+	realIP := CleanIP(string(body1))
 
 	return realIP, err
 }
